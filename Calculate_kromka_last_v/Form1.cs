@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,16 +18,12 @@ namespace Calculate_kromka_last_v
             dt.Columns.Add(new DataColumn("Name"));
             dt.Columns.Add(new DataColumn("Width"));
             dt.Columns.Add(new DataColumn("Height"));
+            dt.Columns.Add("Image", typeof(byte[]));
 
-            
 
             InitializeComponent();
 
-            dataGridView1.ColumnCount = 3;
-            dataGridView1.Columns[0].Name = "Name";
-            dataGridView1.Columns[1].Name = "Width";
-            dataGridView1.Columns[2].Name = "Height";
-
+            
 
         }
 
@@ -144,6 +141,31 @@ namespace Calculate_kromka_last_v
         private void printTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             printDialog1.ShowDialog();
+        }
+
+        private void btn_addValueToTable_Click(object sender, EventArgs e)
+        {
+            DataRow row = dt.NewRow();
+            row["Name"] = r1.name;
+            row["Width"] = r1.width;
+            row["Height"] = r1.height;
+            row["Image"] = imageToByteArray(r1.icone);
+            dt.Rows.Add(row);
+            dgv_test.DataSource = dt;
+        }
+
+        public byte[] imageToByteArray(System.Drawing.Image imageIn)
+        {
+            MemoryStream ms = new MemoryStream();
+            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+            return ms.ToArray();
+        }
+
+        public Image byteArrayToImage(byte[] byteArrayIn)
+        {
+            MemoryStream ms = new MemoryStream(byteArrayIn);
+            Image returnImage = Image.FromStream(ms);
+            return returnImage;
         }
     }
 }
