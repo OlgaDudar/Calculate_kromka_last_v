@@ -23,9 +23,10 @@ namespace Calculate_kromka_last_v
             InitializeComponent();
 
             dataGridView1.ColumnCount = 3;
-            dataGridView1.Columns[0].Name = "Product ID";
-            dataGridView1.Columns[1].Name = "Product Name";
-            dataGridView1.Columns[2].Name = "Product Price";
+            dataGridView1.Columns[0].Name = "Name";
+            dataGridView1.Columns[1].Name = "Width";
+            dataGridView1.Columns[2].Name = "Height";
+
 
         }
 
