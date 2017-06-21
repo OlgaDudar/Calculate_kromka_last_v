@@ -107,6 +107,7 @@ namespace Calculate_kromka_last_v
             row["Length for clue"] = r1.lenght_for_clue;
             dt.Rows.Add(row);
             dgv_test.DataSource = dt;
+
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -117,18 +118,6 @@ namespace Calculate_kromka_last_v
         private void printTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             printDialog1.ShowDialog();
-        }
-
-        private void btn_addValueToTable_Click(object sender, EventArgs e)
-        {
-            DataRow row = dt.NewRow();
-            row["Name"] = r1.name;
-            row["Width"] = r1.width;
-            row["Height"] = r1.height;
-            row["Image"] = imageToByteArray(r1.icone);
-            dt.Rows.Add(row);
-            dgv_test.DataSource = dt;
-            dgv_test.AutoResizeRow(3);
         }
 
         public byte[] imageToByteArray(System.Drawing.Image imageIn)
@@ -144,5 +133,38 @@ namespace Calculate_kromka_last_v
             Image returnImage = Image.FromStream(ms);
             return returnImage;
         }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            int totalLength = 0;
+            foreach (DataRow r in dt.Rows)
+            {
+                totalLength += Convert.ToInt32(r["Length for clue"]);
+            }
+
+            DataRow row = dt.NewRow();
+            row["Name"] = "";
+            row["Width"] = "";
+            row["Height"] = "";
+            row["Image"] = null;
+            row["Length for clue"] = totalLength;
+            dt.Rows.Add(row);
+            dgv_test.DataSource = dt;
+        }
+
+        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Open the print dialog
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.Document = printDocument1;
+            printDialog.UseEXDialog = true;
+            //Get the document
+            if (DialogResult.OK == printDialog.ShowDialog())
+            {
+                printDocument1.DocumentName = "Page Print";
+                printDocument1.Print();
+            }
+        }
+
     }
 }
