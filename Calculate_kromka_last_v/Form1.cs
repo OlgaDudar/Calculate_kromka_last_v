@@ -19,7 +19,7 @@ namespace Calculate_kromka_last_v
             dt.Columns.Add(new DataColumn("Width"));
             dt.Columns.Add(new DataColumn("Height"));
             dt.Columns.Add("Image", typeof(byte[]));
-
+            dt.Columns.Add(new DataColumn("Length for clue"));
 
             InitializeComponent();
 
@@ -44,6 +44,9 @@ namespace Calculate_kromka_last_v
         {
             panel1.Controls.Clear();
             panel2.Visible = true;
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "l_";
             TextLabel = "0";
         }
 
@@ -52,9 +55,6 @@ namespace Calculate_kromka_last_v
             width = Convert.ToInt32(textBox1.Text);
             height = Convert.ToInt32(textBox2.Text);
             ident = textBox3.Text;
-            panel2.Visible = false;
-            textBox1.Text = "";
-            textBox2.Text = "";
             r1 = new Rect(ident, width, height, panel1, this);
             r1.Draw();
 
@@ -98,39 +98,15 @@ namespace Calculate_kromka_last_v
 
         private void saveToTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*int rows = dataGridView1.RowCount-1;
-
-
-
-
-            if (count_tb > 0) {
-                dataGridView1.Rows.Add();
-            }
-            dataGridView1.Rows[0].Cells[0].Value = r1.name;
-            dataGridView1.Rows[0].Cells[1].Value = r1.width;
-            dataGridView1.Rows[0].Cells[2].Value = r1.height;
-            dataGridView1.Rows[0].Cells[3].Value = r1.icone;
-            dataGridView1.Rows[0].Cells[4].Value = r1.lenght_for_clue;
-            //dataGridView1.Rows.Add();
-            dataGridView1.Update();
-            dataGridView1.Refresh();
-            dataGridView1.Rows.Add();
-
-            dataGridView1.
-
-            //count_tb++;
-            */
-            string[] row = new string[] { r1.name, r1.width.ToString(), r1.height.ToString() };
-            dataGridView1.Rows.Add(row);
-
-            DataGridViewImageColumn img = new DataGridViewImageColumn();
-            Image image = r1.icone;
-            img.Image = image;
-            dataGridView1.Columns.Add(img);
-            img.HeaderText = "Image";
-            img.Name = "img";
-
-
+           
+            DataRow row = dt.NewRow();
+            row["Name"] = r1.name;
+            row["Width"] = r1.width;
+            row["Height"] = r1.height;
+            row["Image"] = imageToByteArray(r1.icone);
+            row["Length for clue"] = r1.lenght_for_clue;
+            dt.Rows.Add(row);
+            dgv_test.DataSource = dt;
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
@@ -152,6 +128,7 @@ namespace Calculate_kromka_last_v
             row["Image"] = imageToByteArray(r1.icone);
             dt.Rows.Add(row);
             dgv_test.DataSource = dt;
+            dgv_test.AutoResizeRow(3);
         }
 
         public byte[] imageToByteArray(System.Drawing.Image imageIn)

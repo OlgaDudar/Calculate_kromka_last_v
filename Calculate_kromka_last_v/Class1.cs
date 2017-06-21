@@ -50,12 +50,21 @@ namespace Calculate_kromka_last_v
             panell = p1;
 
             // drawing image
-            icone = new System.Drawing.Bitmap(40, 40);
+            icone = new System.Drawing.Bitmap(20, 20);
             for (int x = 0; x < icone.Height; ++x)
                 for (int y = 0; y < icone.Width; ++y)
                     icone.SetPixel(x, y, Color.White);
-            for (int x = 0; x < icone.Height; ++x)
-                icone.SetPixel(x, x, Color.Red);
+
+            for (int x = 0; x < icone.Width; ++x)
+            {
+                icone.SetPixel(x, 0, Color.Black);
+                icone.SetPixel(x, icone.Height - 1, Color.Black);
+            }
+            for (int y = 0; y < icone.Height; ++y)
+            { 
+                icone.SetPixel(0, y, Color.Black);
+                icone.SetPixel(icone.Width - 1, y, Color.Black);
+            }
 
         }
 
@@ -67,6 +76,8 @@ namespace Calculate_kromka_last_v
                 s4 = true;
                 lenght_for_clue += width;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int x = 0; x < icone.Width; ++x)
+                    icone.SetPixel(x, icone.Height - 1, Color.Red);
             }
             else
             {
@@ -74,6 +85,8 @@ namespace Calculate_kromka_last_v
                 s4 = false;
                 lenght_for_clue -= width;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int x = 0; x < icone.Width; ++x)
+                    icone.SetPixel(x, icone.Height - 1, Color.Black);
             }
 
         }
@@ -86,6 +99,8 @@ namespace Calculate_kromka_last_v
                 s3 = true;
                 lenght_for_clue += height;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int y = 0; y < icone.Height; ++y)
+                    icone.SetPixel(icone.Width - 1, y, Color.Red);
             }
             else
             {
@@ -93,6 +108,8 @@ namespace Calculate_kromka_last_v
                 s3 = false;
                 lenght_for_clue -= height;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int y = 0; y < icone.Height; ++y)
+                    icone.SetPixel(icone.Width - 1, y, Color.Black);
             }
         }
 
@@ -104,6 +121,8 @@ namespace Calculate_kromka_last_v
                 s2 = true;
                 lenght_for_clue += height;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int y = 0; y < icone.Height; ++y)
+                    icone.SetPixel(0, y, Color.Red);
             }
             else
 
@@ -112,6 +131,8 @@ namespace Calculate_kromka_last_v
                 s2 = false;
                 lenght_for_clue -= height;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int y = 0; y < icone.Height; ++y)
+                    icone.SetPixel(0, y, Color.Black);
             }
         }
 
@@ -124,6 +145,8 @@ namespace Calculate_kromka_last_v
                 s1 = true;
                 lenght_for_clue += width;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int x = 0; x < icone.Width; ++x)
+                    icone.SetPixel(x, 0, Color.Red);
             }
             else
             {
@@ -131,6 +154,8 @@ namespace Calculate_kromka_last_v
                 s1 = false;
                 lenght_for_clue -= width;
                 drawForm.TextLabel = Convert.ToString(lenght_for_clue);
+                for (int x = 0; x < icone.Width; ++x)
+                    icone.SetPixel(x, 0, Color.Black);
             }
 
 
