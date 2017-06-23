@@ -177,8 +177,19 @@ namespace Calculate_kromka_last_v
             //Get the document
             if (DialogResult.OK == printDialog.ShowDialog())
             {
+                current_row = 0;
+                FirstPage = true;
+                NewPage = false;
+                MorePagesToPrint = false;
+
                 printDocument1.DocumentName = "Page Print";
                 printDocument1.Print();
+
+                current_row = 0;
+                FirstPage = true;
+                NewPage = false;
+
+                MorePagesToPrint = false;
             }
         }
 
@@ -187,17 +198,22 @@ namespace Calculate_kromka_last_v
            
         }
 
+
+        int current_row;
+        bool FirstPage;
+        bool NewPage;
+        bool MorePagesToPrint;
+
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
 
             int LeftMargin = e.MarginBounds.Left;
-            bool MorePagesToPrint = false;
+            
             int TmpWidth = e.MarginBounds.Width;
            int TopMargin = e.MarginBounds.Top;
-            bool FirstPage = true;
+            
             int TotalWidth = 600;
-            int Row = 0;
-            bool NewPage = false;
+            
             List<int> AColumnLefts = new List<int>();
             List<int> AColumnWidths = new List<int>();
             int HeaderHeight = 25;
@@ -207,64 +223,32 @@ namespace Calculate_kromka_last_v
             strFormat.LineAlignment = StringAlignment.Center;
             strFormat.Trimming = StringTrimming.EllipsisCharacter;
 
+            
+
             if (FirstPage)
             {
                 //Draw Header
-                e.Graphics.DrawString("Sumary tables", new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left,
-                    e.MarginBounds.Top - e.Graphics.MeasureString("Summary tables",
-                    new Font(dgv_test.Font, FontStyle.Bold),
-                    e.MarginBounds.Width).Height - 13);
-
-                String strDate = DateTime.Now.ToLongDateString() + " " +
-                    DateTime.Now.ToShortTimeString();
+                string strDate = NewMethod(e);
                 //Draw Date
-                e.Graphics.DrawString(strDate, new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left +
-                    (e.MarginBounds.Width - e.Graphics.MeasureString(strDate,
-                    new Font(dgv_test.Font, FontStyle.Bold),
-                    e.MarginBounds.Width).Width),
-                    e.MarginBounds.Top - e.Graphics.MeasureString("Summary tables",
-                    new Font(new Font(dgv_test.Font, FontStyle.Bold),
-                    FontStyle.Bold), e.MarginBounds.Width).Height - 13);
+                NewMethod1(e, strDate);
                 //
-                int Count = 0;
 
-                foreach (DataGridViewColumn GridCol in dgv_test.Columns)
-                {
-                  
-                    AColumnLefts.Add(LeftMargin);
-                    AColumnWidths.Add(TmpWidth);
-                    TmpWidth = (int)(Math.Floor((double)((double)GridCol.Width / (double)TotalWidth * (double)TotalWidth * ((double)e.MarginBounds.Width / (double)TotalWidth))));
-
-                    HeaderHeight = (int)(e.Graphics.MeasureString(GridCol.HeaderText, GridCol.InheritedStyle.Font, TmpWidth).Height) + 11;
-                 
-                    e.Graphics.FillRectangle(new SolidBrush(Color.LightGray),
-                               new Rectangle((int)AColumnLefts[Count], TopMargin,
-                               (int)AColumnWidths[Count], HeaderHeight));
-                    e.Graphics.DrawRectangle(Pens.Black,
-                           new Rectangle((int)AColumnLefts[Count], TopMargin,
-                           (int)AColumnWidths[Count], HeaderHeight));
-
-                    e.Graphics.DrawString(GridCol.HeaderText,
-                        GridCol.InheritedStyle.Font,
-                        new SolidBrush(GridCol.InheritedStyle.ForeColor),
-                        new RectangleF((int)AColumnLefts[Count], TopMargin,
-                        (int)AColumnWidths[Count], HeaderHeight), strFormat);
-
-                    Count++;
-                    LeftMargin += TmpWidth;
-                }
+                drawFirstPageHeader(e, ref LeftMargin, ref TmpWidth, TopMargin, TotalWidth, AColumnLefts, AColumnWidths, ref HeaderHeight, strFormat);
                 TopMargin += HeaderHeight;
             }
             MessageBox.Show(dgv_test.Rows.Count.ToString());
             int CellHeight;
-            while (Row < dgv_test.Rows.Count)
+            while (current_row < dgv_test.Rows.Count)
             {
                 //MessageBox.Show("Ok");
-                DataGridViewRow GridRow = dgv_test.Rows[Row];
-               CellHeight = GridRow.Height + 5;
-                int Count = 0;
+                DataGridViewRow GridRow = dgv_test.Rows[current_row];
+                //Control cell height
+                CellHeight = GridRow.Height + 25;
+                
 
                 //Check whether the current page settings allo more rows to print
+                int a = TopMargin + CellHeight;
+                int b = e.MarginBounds.Height + e.MarginBounds.Top;
                 if (TopMargin + CellHeight >= e.MarginBounds.Height + e.MarginBounds.Top)
                 {
                     NewPage = true;
@@ -277,59 +261,101 @@ namespace Calculate_kromka_last_v
                 {
                     if (NewPage)
                     {
-                        
-                        //
-                        foreach (DataGridViewColumn GridCol in dgv_test.Columns)
-                        {
-                            e.Graphics.FillRectangle(new SolidBrush(Color.LightGray),
-                                new Rectangle((int)AColumnLefts[Count], TopMargin,
-                                (int)AColumnWidths[Count], HeaderHeight));
-
-                            e.Graphics.DrawRectangle(Pens.Black,
-                                new Rectangle((int)AColumnLefts[Count], TopMargin, (int)AColumnWidths[Count], HeaderHeight));
-
-                            e.Graphics.DrawString(GridCol.HeaderText, GridCol.InheritedStyle.Font,
-                                new SolidBrush(GridCol.InheritedStyle.ForeColor),
-                                new RectangleF((int)AColumnLefts[Count], TopMargin,
-                                (int)AColumnWidths[Count], HeaderHeight), strFormat);
-                            Count++;
-                        }
+                        drawFirstPageHeader(e, ref LeftMargin, ref TmpWidth, TopMargin, TotalWidth, AColumnLefts, AColumnWidths, ref HeaderHeight, strFormat);
                         NewPage = false;
                         TopMargin += HeaderHeight;
                     }
-                    Count = 0;
+                    //Count = 0;
                     //Draw Columns Contents   
 
-                    foreach (DataGridViewCell Cel in GridRow.Cells)
-                    {
-                        if (Cel.Value != null)
-                        {
-
-                            e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font,
-                                        new SolidBrush(Cel.InheritedStyle.ForeColor),
-                                        new RectangleF((int)AColumnLefts[Count], (float)TopMargin,
-                                        (int)AColumnWidths[Count], (float)CellHeight), strFormat);
-                        }
-                        //Drawing Cells Borders 
-                        e.Graphics.DrawRectangle(Pens.Black, new Rectangle((int)AColumnLefts[Count], TopMargin, (int)AColumnWidths[Count], CellHeight));
-
-                        Count++;
-                    }
+                    drawTableRowWithCells(e, TopMargin, AColumnLefts, AColumnWidths, strFormat, CellHeight, GridRow);
                 }
-                Row++;
+                current_row++;
                 TopMargin += CellHeight;
             }
 
             //If more lines exist, print another page.
             if (MorePagesToPrint)
             {
+                MorePagesToPrint = false;
                 e.HasMorePages = true;
                 
             }
             else
                 e.HasMorePages = false;
+        }
 
-            
+        private void drawFirstPageHeader(PrintPageEventArgs e, ref int LeftMargin, ref int TmpWidth, int TopMargin, int TotalWidth, List<int> AColumnLefts, List<int> AColumnWidths, ref int HeaderHeight, StringFormat strFormat)
+        {
+            int column_count = 0;
+            foreach (DataGridViewColumn GridCol in dgv_test.Columns)
+            {
+
+                AColumnLefts.Add(LeftMargin);
+                AColumnWidths.Add(TmpWidth);
+                TmpWidth = (int)(Math.Floor((double)((double)GridCol.Width / (double)TotalWidth * (double)TotalWidth * ((double)e.MarginBounds.Width / (double)TotalWidth))));
+
+                HeaderHeight = (int)(e.Graphics.MeasureString(GridCol.HeaderText, GridCol.InheritedStyle.Font, TmpWidth).Height) + 11;
+
+                e.Graphics.FillRectangle(new SolidBrush(Color.LightGray),
+                           new Rectangle((int)AColumnLefts[column_count], TopMargin,
+                           (int)AColumnWidths[column_count], HeaderHeight));
+                e.Graphics.DrawRectangle(Pens.Black,
+                       new Rectangle((int)AColumnLefts[column_count], TopMargin,
+                       (int)AColumnWidths[column_count], HeaderHeight));
+
+                e.Graphics.DrawString(GridCol.HeaderText,
+                    GridCol.InheritedStyle.Font,
+                    new SolidBrush(GridCol.InheritedStyle.ForeColor),
+                    new RectangleF((int)AColumnLefts[column_count], TopMargin,
+                    (int)AColumnWidths[column_count], HeaderHeight), strFormat);
+
+                column_count++;
+                LeftMargin += TmpWidth;
+            }
+        }
+
+        private static void drawTableRowWithCells(PrintPageEventArgs e, int TopMargin, List<int> AColumnLefts, List<int> AColumnWidths, StringFormat strFormat, int CellHeight, DataGridViewRow GridRow)
+        {
+            int cellCounter = 0;
+            foreach (DataGridViewCell Cel in GridRow.Cells)
+            {
+                if (Cel.Value != null)
+                {
+
+                    e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font,
+                                new SolidBrush(Cel.InheritedStyle.ForeColor),
+                                new RectangleF((int)AColumnLefts[cellCounter], (float)TopMargin,
+                                (int)AColumnWidths[cellCounter], (float)CellHeight), strFormat);
+                }
+                //Drawing Cells Borders 
+                e.Graphics.DrawRectangle(Pens.Black, new Rectangle((int)AColumnLefts[cellCounter], TopMargin, (int)AColumnWidths[cellCounter], CellHeight));
+
+                cellCounter++;
+            }
+        }
+
+        private void NewMethod1(PrintPageEventArgs e, string strDate)
+        {
+            e.Graphics.DrawString(strDate, new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left +
+                                (e.MarginBounds.Width - e.Graphics.MeasureString(strDate,
+                                new Font(dgv_test.Font, FontStyle.Bold),
+                                e.MarginBounds.Width).Width),
+                                e.MarginBounds.Top - e.Graphics.MeasureString("Summary tables",
+                                new Font(new Font(dgv_test.Font, FontStyle.Bold),
+                                FontStyle.Bold), e.MarginBounds.Width).Height - 13);
+        }
+
+        private string NewMethod(PrintPageEventArgs e)
+        {
+            e.Graphics.DrawString("Sumary tables", new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left,
+                                e.MarginBounds.Top - e.Graphics.MeasureString("Summary tables",
+                                new Font(dgv_test.Font, FontStyle.Bold),
+                                e.MarginBounds.Width).Height - 13);
+
+            String strDate = DateTime.Now.ToLongDateString() + " " +
+                DateTime.Now.ToShortTimeString();
+            return strDate;
         }
 
         private void previewToolStripMenuItem_Click(object sender, EventArgs e)
