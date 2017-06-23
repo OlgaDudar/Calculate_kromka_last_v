@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,8 @@ namespace Calculate_kromka_last_v
             dt.Columns.Add("Image", typeof(byte[]));
             dt.Columns.Add(new DataColumn("Length for clue"));
 
+            pd.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
+
             InitializeComponent();
 
             
@@ -33,7 +36,10 @@ namespace Calculate_kromka_last_v
         public int height;
         internal Rect r1;
         public string ident;
-        int count_tb = 0;
+   
+        System.Drawing.Printing.PrintDocument pd = new PrintDocument();
+
+
         public string TextLabel
         {
             get { return label3.Text; }
@@ -117,7 +123,16 @@ namespace Calculate_kromka_last_v
 
         private void printTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            printDialog1.ShowDialog();
+            PrintDialog printDialog = new PrintDialog();
+            printDialog.Document = pd;
+            printDialog.UseEXDialog = true;
+
+            if (DialogResult.OK == printDialog.ShowDialog())
+            {
+                pd.DocumentName = "Page Title";
+                pd.Print();
+            }
+
         }
 
         public byte[] imageToByteArray(System.Drawing.Image imageIn)
@@ -150,6 +165,7 @@ namespace Calculate_kromka_last_v
             row["Length for clue"] = totalLength;
             dt.Rows.Add(row);
             dgv_test.DataSource = dt;
+            dgv_test.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
         }
 
         private void printToolStripMenuItem_Click(object sender, EventArgs e)
@@ -166,5 +182,162 @@ namespace Calculate_kromka_last_v
             }
         }
 
+        private void printDocument1_BeginPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
+        {
+           
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+
+            int LeftMargin = e.MarginBounds.Left;
+            bool MorePagesToPrint = false;
+            int TmpWidth = e.MarginBounds.Width;
+           int TopMargin = e.MarginBounds.Top;
+            bool FirstPage = true;
+            int TotalWidth = 600;
+            int Row = 0;
+            bool NewPage = false;
+            List<int> AColumnLefts = new List<int>();
+            List<int> AColumnWidths = new List<int>();
+            int HeaderHeight = 25;
+
+            StringFormat strFormat = new StringFormat();
+            strFormat.Alignment = StringAlignment.Near;
+            strFormat.LineAlignment = StringAlignment.Center;
+            strFormat.Trimming = StringTrimming.EllipsisCharacter;
+
+            if (FirstPage)
+            {
+                //Draw Header
+                e.Graphics.DrawString("Sumary tables", new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left,
+                    e.MarginBounds.Top - e.Graphics.MeasureString("Summary tables",
+                    new Font(dgv_test.Font, FontStyle.Bold),
+                    e.MarginBounds.Width).Height - 13);
+
+                String strDate = DateTime.Now.ToLongDateString() + " " +
+                    DateTime.Now.ToShortTimeString();
+                //Draw Date
+                e.Graphics.DrawString(strDate, new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left +
+                    (e.MarginBounds.Width - e.Graphics.MeasureString(strDate,
+                    new Font(dgv_test.Font, FontStyle.Bold),
+                    e.MarginBounds.Width).Width),
+                    e.MarginBounds.Top - e.Graphics.MeasureString("Summary tables",
+                    new Font(new Font(dgv_test.Font, FontStyle.Bold),
+                    FontStyle.Bold), e.MarginBounds.Width).Height - 13);
+                //
+                int Count = 0;
+
+                foreach (DataGridViewColumn GridCol in dgv_test.Columns)
+                {
+                  
+                    AColumnLefts.Add(LeftMargin);
+                    AColumnWidths.Add(TmpWidth);
+                    TmpWidth = (int)(Math.Floor((double)((double)GridCol.Width / (double)TotalWidth * (double)TotalWidth * ((double)e.MarginBounds.Width / (double)TotalWidth))));
+
+                    HeaderHeight = (int)(e.Graphics.MeasureString(GridCol.HeaderText, GridCol.InheritedStyle.Font, TmpWidth).Height) + 11;
+                 
+                    e.Graphics.FillRectangle(new SolidBrush(Color.LightGray),
+                               new Rectangle((int)AColumnLefts[Count], TopMargin,
+                               (int)AColumnWidths[Count], HeaderHeight));
+                    e.Graphics.DrawRectangle(Pens.Black,
+                           new Rectangle((int)AColumnLefts[Count], TopMargin,
+                           (int)AColumnWidths[Count], HeaderHeight));
+
+                    e.Graphics.DrawString(GridCol.HeaderText,
+                        GridCol.InheritedStyle.Font,
+                        new SolidBrush(GridCol.InheritedStyle.ForeColor),
+                        new RectangleF((int)AColumnLefts[Count], TopMargin,
+                        (int)AColumnWidths[Count], HeaderHeight), strFormat);
+
+                    Count++;
+                    LeftMargin += TmpWidth;
+                }
+                TopMargin += HeaderHeight;
+            }
+            MessageBox.Show(dgv_test.Rows.Count.ToString());
+            int CellHeight;
+            while (Row < dgv_test.Rows.Count)
+            {
+                //MessageBox.Show("Ok");
+                DataGridViewRow GridRow = dgv_test.Rows[Row];
+               CellHeight = GridRow.Height + 5;
+                int Count = 0;
+
+                //Check whether the current page settings allo more rows to print
+                if (TopMargin + CellHeight >= e.MarginBounds.Height + e.MarginBounds.Top)
+                {
+                    NewPage = true;
+                    FirstPage = false;
+                    MorePagesToPrint = true;
+                    break;
+                }
+
+                else
+                {
+                    if (NewPage)
+                    {
+                        
+                        //
+                        foreach (DataGridViewColumn GridCol in dgv_test.Columns)
+                        {
+                            e.Graphics.FillRectangle(new SolidBrush(Color.LightGray),
+                                new Rectangle((int)AColumnLefts[Count], TopMargin,
+                                (int)AColumnWidths[Count], HeaderHeight));
+
+                            e.Graphics.DrawRectangle(Pens.Black,
+                                new Rectangle((int)AColumnLefts[Count], TopMargin, (int)AColumnWidths[Count], HeaderHeight));
+
+                            e.Graphics.DrawString(GridCol.HeaderText, GridCol.InheritedStyle.Font,
+                                new SolidBrush(GridCol.InheritedStyle.ForeColor),
+                                new RectangleF((int)AColumnLefts[Count], TopMargin,
+                                (int)AColumnWidths[Count], HeaderHeight), strFormat);
+                            Count++;
+                        }
+                        NewPage = false;
+                        TopMargin += HeaderHeight;
+                    }
+                    Count = 0;
+                    //Draw Columns Contents   
+
+                    foreach (DataGridViewCell Cel in GridRow.Cells)
+                    {
+                        if (Cel.Value != null)
+                        {
+
+                            e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font,
+                                        new SolidBrush(Cel.InheritedStyle.ForeColor),
+                                        new RectangleF((int)AColumnLefts[Count], (float)TopMargin,
+                                        (int)AColumnWidths[Count], (float)CellHeight), strFormat);
+                        }
+                        //Drawing Cells Borders 
+                        e.Graphics.DrawRectangle(Pens.Black, new Rectangle((int)AColumnLefts[Count], TopMargin, (int)AColumnWidths[Count], CellHeight));
+
+                        Count++;
+                    }
+                }
+                Row++;
+                TopMargin += CellHeight;
+            }
+
+            //If more lines exist, print another page.
+            if (MorePagesToPrint)
+            {
+                e.HasMorePages = true;
+                
+            }
+            else
+                e.HasMorePages = false;
+
+            
+        }
+
+        private void previewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            
+            printPreviewDialog1.Document = printDocument1;
+            printPreviewDialog1.Show();
+        }
     }
 }

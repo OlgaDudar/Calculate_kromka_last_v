@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,11 +52,13 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dgv_test = new System.Windows.Forms.DataGridView();
-            this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.previewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.Table.SuspendLayout();
@@ -90,28 +93,29 @@
             // newProjectToolStripMenuItem
             // 
             this.newProjectToolStripMenuItem.Name = "newProjectToolStripMenuItem";
-            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(254, 38);
+            this.newProjectToolStripMenuItem.Size = new System.Drawing.Size(335, 38);
             this.newProjectToolStripMenuItem.Text = "New Project";
             this.newProjectToolStripMenuItem.Click += new System.EventHandler(this.newProjectToolStripMenuItem_Click);
             // 
             // addElementToolStripMenuItem
             // 
             this.addElementToolStripMenuItem.Name = "addElementToolStripMenuItem";
-            this.addElementToolStripMenuItem.Size = new System.Drawing.Size(254, 38);
+            this.addElementToolStripMenuItem.Size = new System.Drawing.Size(335, 38);
             this.addElementToolStripMenuItem.Text = "Add Element";
             this.addElementToolStripMenuItem.Click += new System.EventHandler(this.addElementToolStripMenuItem_Click);
             // 
             // saveToTableToolStripMenuItem
             // 
             this.saveToTableToolStripMenuItem.Name = "saveToTableToolStripMenuItem";
-            this.saveToTableToolStripMenuItem.Size = new System.Drawing.Size(254, 38);
+            this.saveToTableToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToTableToolStripMenuItem.Size = new System.Drawing.Size(335, 38);
             this.saveToTableToolStripMenuItem.Text = "Save to table";
             this.saveToTableToolStripMenuItem.Click += new System.EventHandler(this.saveToTableToolStripMenuItem_Click);
             // 
             // printTableToolStripMenuItem
             // 
             this.printTableToolStripMenuItem.Name = "printTableToolStripMenuItem";
-            this.printTableToolStripMenuItem.Size = new System.Drawing.Size(254, 38);
+            this.printTableToolStripMenuItem.Size = new System.Drawing.Size(335, 38);
             this.printTableToolStripMenuItem.Text = "Print table";
             this.printTableToolStripMenuItem.Click += new System.EventHandler(this.printTableToolStripMenuItem_Click);
             // 
@@ -261,25 +265,22 @@
             // 
             this.dgv_test.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_test.ContextMenuStrip = this.contextMenuStrip1;
-            this.dgv_test.Location = new System.Drawing.Point(163, 31);
+            this.dgv_test.Location = new System.Drawing.Point(8, 10);
             this.dgv_test.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgv_test.Name = "dgv_test";
             this.dgv_test.RowTemplate.Height = 24;
-            this.dgv_test.Size = new System.Drawing.Size(1197, 767);
+            this.dgv_test.Size = new System.Drawing.Size(1370, 767);
             this.dgv_test.TabIndex = 12;
-            // 
-            // printDialog1
-            // 
-            this.printDialog1.UseEXDialog = true;
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1,
-            this.printToolStripMenuItem});
+            this.printToolStripMenuItem,
+            this.previewToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(235, 80);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(235, 118);
             // 
             // toolStripMenuItem1
             // 
@@ -294,6 +295,32 @@
             this.printToolStripMenuItem.Size = new System.Drawing.Size(269, 38);
             this.printToolStripMenuItem.Text = "Print";
             this.printToolStripMenuItem.Click += new System.EventHandler(this.printToolStripMenuItem_Click);
+            // 
+            // printDialog1
+            // 
+            this.printDialog1.UseEXDialog = true;
+            // 
+            // printDocument1
+            // 
+            this.printDocument1.BeginPrint += new System.Drawing.Printing.PrintEventHandler(this.printDocument1_BeginPrint);
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+            // 
+            // previewToolStripMenuItem
+            // 
+            this.previewToolStripMenuItem.Name = "previewToolStripMenuItem";
+            this.previewToolStripMenuItem.Size = new System.Drawing.Size(269, 38);
+            this.previewToolStripMenuItem.Text = "Preview";
+            this.previewToolStripMenuItem.Click += new System.EventHandler(this.previewToolStripMenuItem_Click);
+            // 
+            // printPreviewDialog1
+            // 
+            this.printPreviewDialog1.AutoScrollMargin = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
+            this.printPreviewDialog1.Enabled = true;
+            this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
+            this.printPreviewDialog1.Name = "printPreviewDialog1";
+            this.printPreviewDialog1.Visible = false;
             // 
             // Form1
             // 
@@ -350,6 +377,8 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
         private System.Drawing.Printing.PrintDocument printDocument1;
+        private System.Windows.Forms.ToolStripMenuItem previewToolStripMenuItem;
+        private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
     }
 }
 
