@@ -322,11 +322,22 @@ namespace Calculate_kromka_last_v
             {
                 if (Cel.Value != null)
                 {
+                    if (Cel.Value.GetType().ToString().Equals("System.Byte[]"))
+                    {
+                        byte[] asd = (byte[])Cel.Value;
 
-                    e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font,
-                                new SolidBrush(Cel.InheritedStyle.ForeColor),
-                                new RectangleF((int)AColumnLefts[cellCounter], (float)TopMargin,
-                                (int)AColumnWidths[cellCounter], (float)CellHeight), strFormat);
+                        MemoryStream ms = new MemoryStream(asd);
+                        Image returnImage = Image.FromStream(ms);
+
+                        e.Graphics.DrawImage(returnImage, new Point(AColumnLefts[cellCounter]+5, TopMargin+5));
+                    }
+                    else
+                    {
+                        e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font,
+                                    new SolidBrush(Cel.InheritedStyle.ForeColor),
+                                    new RectangleF((int)AColumnLefts[cellCounter], (float)TopMargin,
+                                    (int)AColumnWidths[cellCounter], (float)CellHeight), strFormat);
+                    }
                 }
                 //Drawing Cells Borders 
                 e.Graphics.DrawRectangle(Pens.Black, new Rectangle((int)AColumnLefts[cellCounter], TopMargin, (int)AColumnWidths[cellCounter], CellHeight));
