@@ -200,7 +200,7 @@ namespace Calculate_kromka_last_v
 
 
         int current_row;
-        bool FirstPage;
+        bool FirstPage = true;
         bool NewPage;
         bool MorePagesToPrint;
 
@@ -268,7 +268,7 @@ namespace Calculate_kromka_last_v
                     //Count = 0;
                     //Draw Columns Contents   
 
-                    drawTableRowWithCells(e, TopMargin, AColumnLefts, AColumnWidths, strFormat, CellHeight, GridRow);
+                    drawTableRowWithCells(e, ref LeftMargin, ref TmpWidth, TopMargin, AColumnLefts, AColumnWidths, strFormat, CellHeight, GridRow);
                 }
                 current_row++;
                 TopMargin += CellHeight;
@@ -315,7 +315,7 @@ namespace Calculate_kromka_last_v
             }
         }
 
-        private static void drawTableRowWithCells(PrintPageEventArgs e, int TopMargin, List<int> AColumnLefts, List<int> AColumnWidths, StringFormat strFormat, int CellHeight, DataGridViewRow GridRow)
+        private static void drawTableRowWithCells(PrintPageEventArgs e, ref int LeftMargin, ref int TmpWidth, int TopMargin, List<int> AColumnLefts, List<int> AColumnWidths, StringFormat strFormat, int CellHeight, DataGridViewRow GridRow)
         {
             int cellCounter = 0;
             foreach (DataGridViewCell Cel in GridRow.Cells)
