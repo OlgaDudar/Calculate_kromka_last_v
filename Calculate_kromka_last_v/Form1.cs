@@ -333,7 +333,7 @@ namespace Calculate_kromka_last_v
                     }
                     else
                     {
-                        e.Graphics.DrawString(Cel.Value.ToString(), Cel.InheritedStyle.Font,
+                        e.Graphics.DrawString((Cel.Value.GetType().ToString().Equals("System.Drawing.Bitmap")) ? "" : Cel.Value.ToString(), Cel.InheritedStyle.Font,
                                     new SolidBrush(Cel.InheritedStyle.ForeColor),
                                     new RectangleF((int)AColumnLefts[cellCounter], (float)TopMargin,
                                     (int)AColumnWidths[cellCounter], (float)CellHeight), strFormat);
