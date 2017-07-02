@@ -14,6 +14,17 @@ namespace Calculate_kromka_last_v
 {
     public partial class Form1 : Form
     {
+        int current_row;
+        bool FirstPage = true;
+        bool NewPage;
+        bool MorePagesToPrint;
+        DataTable dt = new DataTable();
+        public int width;
+        public int height;
+        internal Rect r1;
+        public string ident;
+        PrintDocument pd = new PrintDocument();
+
         public Form1()
         {
             dt.Columns.Add(new DataColumn("Name"));
@@ -21,49 +32,91 @@ namespace Calculate_kromka_last_v
             dt.Columns.Add(new DataColumn("Height"));
             dt.Columns.Add("Image", typeof(byte[]));
             dt.Columns.Add(new DataColumn("Length for clue"));
-
             pd.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
-
             InitializeComponent();
-
-            
-
+            InitializeTextValues();
         }
-
-        DataTable dt = new DataTable();
-        
-        public int width;
-        public int height;
-        internal Rect r1;
-        public string ident;
-   
-        System.Drawing.Printing.PrintDocument pd = new PrintDocument();
-
 
         public string TextLabel
         {
-            get { return label3.Text; }
-            set { label3.Text = value; }
+            get { return lbl_total.Text; }
+            set { lbl_total.Text = value; }
         }
 
-        private void addElementToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AddElementToolStripMenuItem_Click(object sender, EventArgs e)
         {
             panel1.Controls.Clear();
             panel2.Visible = true;
-            textBox1.Text = "";
-            textBox2.Text = "";
-            textBox3.Text = "l_";
+            InitializeTextValues();
+            btn_draw.Enabled = true;
+        }
+
+        private void InitializeTextValues()
+        {
+            txb_width.Text = "1";
+            txb_height.Text = "1";
+            txb_Name.Text = "Name";
             TextLabel = "0";
+            txb_height.BackColor = Color.White;
+            txb_width.BackColor = Color.White;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            width = Convert.ToInt32(textBox1.Text);
-            height = Convert.ToInt32(textBox2.Text);
-            ident = textBox3.Text;
-            r1 = new Rect(ident, width, height, panel1, this);
-            r1.Draw();
+            if (!CheckValues())
+            {
+                width = Convert.ToInt32(txb_width.Text);
+                height = Convert.ToInt32(txb_height.Text);
+                ident = txb_Name.Text;
+                r1 = new Rect(ident, width, height, panel1, this);
+                r1.Draw();
+                btn_draw.Enabled = false;
+            }
+        }
 
+        //return true if any inconsisten values
+        private bool CheckValues()
+        {
+            List<string> errorMessage = new List<string>();
+            try
+            {
+                int width = Convert.ToInt32(txb_width.Text);
+                if (width <= 0)
+                {
+                    txb_width.BackColor = System.Drawing.Color.Red;
+                    errorMessage.Add("Width should be greater than 0");
+                }
+            }
+            catch(Exception e)
+            {
+                txb_width.BackColor = System.Drawing.Color.Red;
+                errorMessage.Add("Width incorrect value");
+            }
+            try
+            {
+                int height = Convert.ToInt32(txb_height.Text);
+                if (height <= 0)
+                {
+                    txb_height.BackColor = System.Drawing.Color.Red;
+                    errorMessage.Add("Height should be greater than 0");
+                }
+            }
+            catch (Exception e)
+            {
+                txb_height.BackColor = System.Drawing.Color.Red;
+                errorMessage.Add("Height incorrect value");
+            }
+            if(errorMessage.Count > 0)
+            {
+                String message = string.Join(", ", errorMessage.ToArray());
+                MessageBox.Show(message);
+            }
+            return (errorMessage.Count > 0) ? true : false;
+        }
+
+        private void txb_width_MouseEnter(object sender, EventArgs e)
+        {
+            txb_width.BackColor = System.Drawing.Color.White;
         }
 
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
@@ -116,11 +169,6 @@ namespace Calculate_kromka_last_v
 
         }
 
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void printTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PrintDialog printDialog = new PrintDialog();
@@ -158,7 +206,7 @@ namespace Calculate_kromka_last_v
             }
 
             DataRow row = dt.NewRow();
-            row["Name"] = "";
+            row["Name"] = "Total";
             row["Width"] = "";
             row["Height"] = "";
             row["Image"] = null;
@@ -193,47 +241,26 @@ namespace Calculate_kromka_last_v
             }
         }
 
-        private void printDocument1_BeginPrint(object sender, System.Drawing.Printing.PrintEventArgs e)
-        {
-           
-        }
-
-
-        int current_row;
-        bool FirstPage = true;
-        bool NewPage;
-        bool MorePagesToPrint;
-
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
-
             int LeftMargin = e.MarginBounds.Left;
-            
             int TmpWidth = e.MarginBounds.Width;
-           int TopMargin = e.MarginBounds.Top;
-            
+            int TopMargin = e.MarginBounds.Top;
             int TotalWidth = 600;
-            
             List<int> AColumnLefts = new List<int>();
             List<int> AColumnWidths = new List<int>();
             int HeaderHeight = 25;
-
             StringFormat strFormat = new StringFormat();
             strFormat.Alignment = StringAlignment.Near;
             strFormat.LineAlignment = StringAlignment.Center;
             strFormat.Trimming = StringTrimming.EllipsisCharacter;
-
-            
-
             if (FirstPage)
             {
                 //Draw Header
-                string strDate = NewMethod(e);
+                string strDate = PrintTableHeaderText(e, "Sumary tables");
                 //Draw Date
-                NewMethod1(e, strDate);
-                //
-
-                drawFirstPageHeader(e, ref LeftMargin, ref TmpWidth, TopMargin, TotalWidth, AColumnLefts, AColumnWidths, ref HeaderHeight, strFormat);
+                PrintCurrentDateAtThePageHeader(e, strDate);
+                DrawFirstPageHeader(e, ref LeftMargin, ref TmpWidth, TopMargin, TotalWidth, AColumnLefts, AColumnWidths, ref HeaderHeight, strFormat);
                 TopMargin += HeaderHeight;
             }
             MessageBox.Show(dgv_test.Rows.Count.ToString());
@@ -244,8 +271,6 @@ namespace Calculate_kromka_last_v
                 DataGridViewRow GridRow = dgv_test.Rows[current_row];
                 //Control cell height
                 CellHeight = GridRow.Height + 25;
-                
-
                 //Check whether the current page settings allo more rows to print
                 int a = TopMargin + CellHeight;
                 int b = e.MarginBounds.Height + e.MarginBounds.Top;
@@ -256,19 +281,16 @@ namespace Calculate_kromka_last_v
                     MorePagesToPrint = true;
                     break;
                 }
-
                 else
                 {
                     if (NewPage)
                     {
-                        drawFirstPageHeader(e, ref LeftMargin, ref TmpWidth, TopMargin, TotalWidth, AColumnLefts, AColumnWidths, ref HeaderHeight, strFormat);
+                        DrawFirstPageHeader(e, ref LeftMargin, ref TmpWidth, TopMargin, TotalWidth, AColumnLefts, AColumnWidths, ref HeaderHeight, strFormat);
                         NewPage = false;
                         TopMargin += HeaderHeight;
                     }
-                    //Count = 0;
                     //Draw Columns Contents   
-
-                    drawTableRowWithCells(e, ref LeftMargin, ref TmpWidth, TopMargin, AColumnLefts, AColumnWidths, strFormat, CellHeight, GridRow);
+                    DrawTableRowWithCells(e, ref LeftMargin, ref TmpWidth, TopMargin, AColumnLefts, AColumnWidths, strFormat, CellHeight, GridRow);
                 }
                 current_row++;
                 TopMargin += CellHeight;
@@ -285,7 +307,7 @@ namespace Calculate_kromka_last_v
                 e.HasMorePages = false;
         }
 
-        private void drawFirstPageHeader(PrintPageEventArgs e, ref int LeftMargin, ref int TmpWidth, int TopMargin, int TotalWidth, List<int> AColumnLefts, List<int> AColumnWidths, ref int HeaderHeight, StringFormat strFormat)
+        private void DrawFirstPageHeader(PrintPageEventArgs e, ref int LeftMargin, ref int TmpWidth, int TopMargin, int TotalWidth, List<int> AColumnLefts, List<int> AColumnWidths, ref int HeaderHeight, StringFormat strFormat)
         {
             int column_count = 0;
             foreach (DataGridViewColumn GridCol in dgv_test.Columns)
@@ -315,7 +337,7 @@ namespace Calculate_kromka_last_v
             }
         }
 
-        private static void drawTableRowWithCells(PrintPageEventArgs e, ref int LeftMargin, ref int TmpWidth, int TopMargin, List<int> AColumnLefts, List<int> AColumnWidths, StringFormat strFormat, int CellHeight, DataGridViewRow GridRow)
+        private static void DrawTableRowWithCells(PrintPageEventArgs e, ref int LeftMargin, ref int TmpWidth, int TopMargin, List<int> AColumnLefts, List<int> AColumnWidths, StringFormat strFormat, int CellHeight, DataGridViewRow GridRow)
         {
             int cellCounter = 0;
             foreach (DataGridViewCell Cel in GridRow.Cells)
@@ -346,7 +368,7 @@ namespace Calculate_kromka_last_v
             }
         }
 
-        private void NewMethod1(PrintPageEventArgs e, string strDate)
+        private void PrintCurrentDateAtThePageHeader(PrintPageEventArgs e, string strDate)
         {
             e.Graphics.DrawString(strDate, new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left +
                                 (e.MarginBounds.Width - e.Graphics.MeasureString(strDate,
@@ -357,10 +379,10 @@ namespace Calculate_kromka_last_v
                                 FontStyle.Bold), e.MarginBounds.Width).Height - 13);
         }
 
-        private string NewMethod(PrintPageEventArgs e)
+        private string PrintTableHeaderText(PrintPageEventArgs e, String caption)
         {
-            e.Graphics.DrawString("Sumary tables", new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left,
-                                e.MarginBounds.Top - e.Graphics.MeasureString("Summary tables",
+            e.Graphics.DrawString(caption, new Font(dgv_test.Font, FontStyle.Bold), Brushes.Black, e.MarginBounds.Left,
+                                e.MarginBounds.Top - e.Graphics.MeasureString(caption,
                                 new Font(dgv_test.Font, FontStyle.Bold),
                                 e.MarginBounds.Width).Height - 13);
 
@@ -371,10 +393,18 @@ namespace Calculate_kromka_last_v
 
         private void previewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            
             printPreviewDialog1.Document = printDocument1;
             printPreviewDialog1.Show();
+        }
+
+        private void txb_width_Enter(object sender, EventArgs e)
+        {
+            txb_width.BackColor = System.Drawing.Color.White;
+        }
+
+        private void txb_height_Enter(object sender, EventArgs e)
+        {
+            txb_height.BackColor = System.Drawing.Color.White;
         }
     }
 }
