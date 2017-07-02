@@ -35,6 +35,9 @@
             this.addElementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.printTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uKRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
@@ -60,9 +63,6 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
-            this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uKRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.Table.SuspendLayout();
@@ -107,6 +107,26 @@
             this.printTableToolStripMenuItem.Name = "printTableToolStripMenuItem";
             resources.ApplyResources(this.printTableToolStripMenuItem, "printTableToolStripMenuItem");
             this.printTableToolStripMenuItem.Click += new System.EventHandler(this.printTableToolStripMenuItem_Click);
+            // 
+            // languageToolStripMenuItem
+            // 
+            this.languageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.uKRToolStripMenuItem,
+            this.eNGToolStripMenuItem});
+            this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+            resources.ApplyResources(this.languageToolStripMenuItem, "languageToolStripMenuItem");
+            // 
+            // uKRToolStripMenuItem
+            // 
+            this.uKRToolStripMenuItem.Name = "uKRToolStripMenuItem";
+            resources.ApplyResources(this.uKRToolStripMenuItem, "uKRToolStripMenuItem");
+            this.uKRToolStripMenuItem.Click += new System.EventHandler(this.uKRToolStripMenuItem_Click);
+            // 
+            // eNGToolStripMenuItem
+            // 
+            this.eNGToolStripMenuItem.Name = "eNGToolStripMenuItem";
+            resources.ApplyResources(this.eNGToolStripMenuItem, "eNGToolStripMenuItem");
+            this.eNGToolStripMenuItem.Click += new System.EventHandler(this.eNGToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -154,7 +174,7 @@
             resources.ApplyResources(this.btn_draw, "btn_draw");
             this.btn_draw.Name = "btn_draw";
             this.btn_draw.UseVisualStyleBackColor = false;
-            this.btn_draw.Click += new System.EventHandler(this.button1_Click);
+            this.btn_draw.Click += new System.EventHandler(this.DrawElement);
             // 
             // label1
             // 
@@ -217,6 +237,7 @@
             resources.ApplyResources(this.tabPage3, "tabPage3");
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
+            this.tabPage3.Enter += new System.EventHandler(this.tabPage3_Enter);
             // 
             // dgv_test
             // 
@@ -266,26 +287,6 @@
             // 
             resources.ApplyResources(this.printPreviewDialog1, "printPreviewDialog1");
             this.printPreviewDialog1.Name = "printPreviewDialog1";
-            // 
-            // languageToolStripMenuItem
-            // 
-            this.languageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.uKRToolStripMenuItem,
-            this.eNGToolStripMenuItem});
-            this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            resources.ApplyResources(this.languageToolStripMenuItem, "languageToolStripMenuItem");
-            // 
-            // uKRToolStripMenuItem
-            // 
-            this.uKRToolStripMenuItem.Name = "uKRToolStripMenuItem";
-            resources.ApplyResources(this.uKRToolStripMenuItem, "uKRToolStripMenuItem");
-            this.uKRToolStripMenuItem.Click += new System.EventHandler(this.uKRToolStripMenuItem_Click);
-            // 
-            // eNGToolStripMenuItem
-            // 
-            this.eNGToolStripMenuItem.Name = "eNGToolStripMenuItem";
-            resources.ApplyResources(this.eNGToolStripMenuItem, "eNGToolStripMenuItem");
-            this.eNGToolStripMenuItem.Click += new System.EventHandler(this.eNGToolStripMenuItem_Click);
             // 
             // Form1
             // 

@@ -77,7 +77,7 @@ namespace Calculate_kromka_last_v
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void DrawElement(object sender, EventArgs e)
         {
             if (!CheckValues())
             {
@@ -132,9 +132,10 @@ namespace Calculate_kromka_last_v
 
         private void txb_width_MouseEnter(object sender, EventArgs e)
         {
-            txb_width.BackColor = System.Drawing.Color.White;
+            txb_width.BackColor = Color.White;
         }
 
+        //TODO: check and remove
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.ShowDialog();
@@ -173,7 +174,10 @@ namespace Calculate_kromka_last_v
 
         private void saveToTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
+            if(dt == null)
+            {
+                InitializeTable();
+            }
             DataRow row = dt.NewRow();
             row["Name"] = r1.name;
             row["Width"] = r1.width;
@@ -181,7 +185,7 @@ namespace Calculate_kromka_last_v
             row["Image"] = imageToByteArray(r1.icone);
             row["Length for clue"] = r1.lenght_for_clue;
             dt.Rows.Add(row);
-            dgv_test.DataSource = dt;
+            //dgv_test.DataSource = dt;
 
         }
 
@@ -437,11 +441,15 @@ namespace Calculate_kromka_last_v
 
         private void FormRefresh()
         {
-            DestroyValues();
             this.Controls.Clear();
             this.InitializeComponent();
-            InitializeTable();
             InitializeValues();
+        }
+
+        private void tabPage3_Enter(object sender, EventArgs e)
+        {
+            if(dt != null)
+                dgv_test.DataSource = dt;
         }
     }
 }
