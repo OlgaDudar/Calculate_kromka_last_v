@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 using System.Threading;
+using System.Resources;
 
 namespace Calculate_kromka_last_v
 {
@@ -411,10 +412,20 @@ namespace Calculate_kromka_last_v
             return strDate;
         }
 
+        ResourceManager rm = new ResourceManager(typeof(Calculate_kromka_last_v.Properties.Resources));
+
         private void previewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            printPreviewDialog1.Document = printDocument1;
-            printPreviewDialog1.Show();
+            try
+            {
+                printPreviewDialog1.Document = printDocument1;
+                printPreviewDialog1.Show();
+            }
+            catch(Exception err)
+            {
+                String errorMessage = rm.GetString("WarningMessagePrintPreview", Thread.CurrentThread.CurrentUICulture);
+                MessageBox.Show("Print preview not available", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void txb_width_Enter(object sender, EventArgs e)

@@ -402,4 +402,7 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Обрахунок довжини проклейки</value>
   </data>
+  <data name="WarningMessagePrintPreview" xml:space="preserve">
+    <value>Попередній перегляд не можливий</value>
+  </data>
 </root>
