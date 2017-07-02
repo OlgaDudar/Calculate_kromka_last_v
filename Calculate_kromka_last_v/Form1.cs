@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Globalization;
+using System.Threading;
 
 namespace Calculate_kromka_last_v
 {
@@ -18,7 +20,7 @@ namespace Calculate_kromka_last_v
         bool FirstPage = true;
         bool NewPage;
         bool MorePagesToPrint;
-        DataTable dt = new DataTable();
+        DataTable dt;
         public int width;
         public int height;
         internal Rect r1;
@@ -27,14 +29,9 @@ namespace Calculate_kromka_last_v
 
         public Form1()
         {
-            dt.Columns.Add(new DataColumn("Name"));
-            dt.Columns.Add(new DataColumn("Width"));
-            dt.Columns.Add(new DataColumn("Height"));
-            dt.Columns.Add("Image", typeof(byte[]));
-            dt.Columns.Add(new DataColumn("Length for clue"));
-            pd.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
+            InitializeTable();
             InitializeComponent();
-            InitializeTextValues();
+            InitializeValues();
         }
 
         public string TextLabel
@@ -47,11 +44,22 @@ namespace Calculate_kromka_last_v
         {
             panel1.Controls.Clear();
             panel2.Visible = true;
-            InitializeTextValues();
+            InitializeValues();
             btn_draw.Enabled = true;
         }
 
-        private void InitializeTextValues()
+        private void InitializeTable()
+        {
+            dt = new DataTable();
+            dt.Columns.Add(new DataColumn("Name"));
+            dt.Columns.Add(new DataColumn("Width"));
+            dt.Columns.Add(new DataColumn("Height"));
+            dt.Columns.Add("Image", typeof(byte[]));
+            dt.Columns.Add(new DataColumn("Length for clue"));
+            pd.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
+        }
+
+        private void InitializeValues()
         {
             txb_width.Text = "1";
             txb_height.Text = "1";
@@ -59,6 +67,14 @@ namespace Calculate_kromka_last_v
             TextLabel = "0";
             txb_height.BackColor = Color.White;
             txb_width.BackColor = Color.White;
+        }
+
+        private void DestroyValues()
+        {
+            dt.Clear();
+            dt = null;
+            pd.PrintPage -= new PrintPageEventHandler(printDocument1_PrintPage);
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -263,7 +279,7 @@ namespace Calculate_kromka_last_v
                 DrawFirstPageHeader(e, ref LeftMargin, ref TmpWidth, TopMargin, TotalWidth, AColumnLefts, AColumnWidths, ref HeaderHeight, strFormat);
                 TopMargin += HeaderHeight;
             }
-            MessageBox.Show(dgv_test.Rows.Count.ToString());
+            //MessageBox.Show(dgv_test.Rows.Count.ToString());
             int CellHeight;
             while (current_row < dgv_test.Rows.Count)
             {
@@ -405,6 +421,27 @@ namespace Calculate_kromka_last_v
         private void txb_height_Enter(object sender, EventArgs e)
         {
             txb_height.BackColor = System.Drawing.Color.White;
+        }
+
+        private void uKRToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("uk-UA");
+            FormRefresh();
+        }
+
+        private void eNGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            FormRefresh();
+        }
+
+        private void FormRefresh()
+        {
+            DestroyValues();
+            this.Controls.Clear();
+            this.InitializeComponent();
+            InitializeTable();
+            InitializeValues();
         }
     }
 }
