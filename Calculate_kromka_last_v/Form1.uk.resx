@@ -118,6 +118,48 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="addElementToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>292, 26</value>
+  </data>
+  <data name="addElementToolStripMenuItem.Text" xml:space="preserve">
+    <value>Додати Елемент</value>
+  </data>
+  <data name="saveToTableToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>292, 26</value>
+  </data>
+  <data name="saveToTableToolStripMenuItem.Text" xml:space="preserve">
+    <value>Зберегти до таблиці</value>
+  </data>
+  <data name="printTableToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>292, 26</value>
+  </data>
+  <data name="printTableToolStripMenuItem.Text" xml:space="preserve">
+    <value>Роздрукувати таблицю</value>
+  </data>
+  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 24</value>
+  </data>
+  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="uKRToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 26</value>
+  </data>
+  <data name="uKRToolStripMenuItem.Text" xml:space="preserve">
+    <value>Українська</value>
+  </data>
+  <data name="eNGToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 26</value>
+  </data>
+  <data name="eNGToolStripMenuItem.Text" xml:space="preserve">
+    <value>Англійська</value>
+  </data>
+  <data name="languageToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 24</value>
+  </data>
+  <data name="languageToolStripMenuItem.Text" xml:space="preserve">
+    <value>Мова</value>
+  </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 17</value>
   </data>
@@ -139,8 +181,50 @@
   <data name="label2.Text" xml:space="preserve">
     <value>Висота</value>
   </data>
-  <data name="tabPage3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>927, 553</value>
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 17</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Сумарно до поклейки</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>148, 17</value>
+  </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Ctrl + S щоб зберегти</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 17</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>Ctrl + N для нового елементу</value>
+  </data>
+  <data name="tabPage1.Text" xml:space="preserve">
+    <value>Додавання Елементу</value>
+  </data>
+  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 24</value>
+  </data>
+  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+    <value>Підсумувати</value>
+  </data>
+  <data name="printToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 24</value>
+  </data>
+  <data name="printToolStripMenuItem.Text" xml:space="preserve">
+    <value>Роздрукувати</value>
+  </data>
+  <data name="previewToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 24</value>
+  </data>
+  <data name="previewToolStripMenuItem.Text" xml:space="preserve">
+    <value>Перегляд</value>
+  </data>
+  <data name="contextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 76</value>
+  </data>
+  <data name="tabPage3.Text" xml:space="preserve">
+    <value>Таблиця Елементів</value>
   </data>
   <data name="printPreviewDialog1.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
