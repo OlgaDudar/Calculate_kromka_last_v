@@ -24,8 +24,10 @@ namespace Calculate_kromka_last_v
         DataTable dt;
         public int width;
         public int height;
+        public int cnt;
         internal Rect r1;
         public string ident;
+        public string mat;
         PrintDocument pd = new PrintDocument();
 
         public Form1()
@@ -33,6 +35,8 @@ namespace Calculate_kromka_last_v
             InitializeTable();
             InitializeComponent();
             InitializeValues();
+
+            printDocument1.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
         }
 
         public string TextLabel
@@ -53,10 +57,13 @@ namespace Calculate_kromka_last_v
         {
             dt = new DataTable();
             dt.Columns.Add(new DataColumn("Name"));
+            dt.Columns.Add(new DataColumn("Material"));
             dt.Columns.Add(new DataColumn("Width"));
             dt.Columns.Add(new DataColumn("Height"));
+            dt.Columns.Add(new DataColumn("Count"));
             dt.Columns.Add("Image", typeof(byte[]));
             dt.Columns.Add(new DataColumn("Length for clue"));
+            dt.Columns.Add(new DataColumn("Total length for clue"));
             pd.PrintPage += new PrintPageEventHandler(printDocument1_PrintPage);
         }
 
@@ -65,6 +72,7 @@ namespace Calculate_kromka_last_v
             txb_width.Text = "1";
             txb_height.Text = "1";
             txb_Name.Text = "Name";
+            txt_count.Text = "1";
             TextLabel = "0";
             txb_height.BackColor = Color.White;
             txb_width.BackColor = Color.White;
@@ -75,7 +83,7 @@ namespace Calculate_kromka_last_v
             dt.Clear();
             dt = null;
             pd.PrintPage -= new PrintPageEventHandler(printDocument1_PrintPage);
-
+            printDialog1.Dispose();
         }
 
         private void DrawElement(object sender, EventArgs e)
@@ -85,7 +93,10 @@ namespace Calculate_kromka_last_v
                 width = Convert.ToInt32(txb_width.Text);
                 height = Convert.ToInt32(txb_height.Text);
                 ident = txb_Name.Text;
-                r1 = new Rect(ident, width, height, panel1, this);
+                mat = cmb_material.Text;
+                cnt = Convert.ToInt32(txt_count.Text);
+
+                r1 = new Rect(ident, mat, cnt, width, height, panel1, this);
                 r1.Draw();
                 btn_draw.Enabled = false;
             }
@@ -139,38 +150,7 @@ namespace Calculate_kromka_last_v
         //TODO: check and remove
         private void newProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.ShowDialog();
-            saveFileDialog1.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
-            saveFileDialog1.Title = "Save an Image File";
-            // If the file name is not an empty string open it for saving.
-            if (saveFileDialog1.FileName != "")
-            {
-                // Saves the Image via a FileStream created by the OpenFile method.
-                System.IO.FileStream fs =
-                   (System.IO.FileStream)saveFileDialog1.OpenFile();
-                // Saves the Image in the appropriate ImageFormat based upon the
-                // File type selected in the dialog box.
-                // NOTE that the FilterIndex property is one-based.
-                switch (saveFileDialog1.FilterIndex)
-                {
-                    case 1:
-                        this.panel1.BackgroundImage.Save(fs,
-                           System.Drawing.Imaging.ImageFormat.Jpeg);
-                        break;
 
-                    case 2:
-                        this.panel1.BackgroundImage.Save(fs,
-                           System.Drawing.Imaging.ImageFormat.Bmp);
-                  break;
-
-              case 3:
-                  this.panel1.BackgroundImage.Save(fs,
-                     System.Drawing.Imaging.ImageFormat.Gif);
-                  break;
-          }
-
-                fs.Close();
-            }
         }
 
         private void saveToTableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -181,10 +161,13 @@ namespace Calculate_kromka_last_v
             }
             DataRow row = dt.NewRow();
             row["Name"] = r1.name;
+            row["Material"] = r1.material;
             row["Width"] = r1.width;
             row["Height"] = r1.height;
+            row["Count"] = r1.count;
             row["Image"] = imageToByteArray(r1.icone);
             row["Length for clue"] = r1.lenght_for_clue;
+            row["Total Length for clue"] = r1.lenght_for_clue*r1.count;
             dt.Rows.Add(row);
             //dgv_test.DataSource = dt;
 
@@ -198,9 +181,15 @@ namespace Calculate_kromka_last_v
 
             if (DialogResult.OK == printDialog.ShowDialog())
             {
+                current_row = 0;
+                FirstPage = true;
+                NewPage = false;
+                MorePagesToPrint = false;
+
                 pd.DocumentName = "Page Title";
                 pd.Print();
             }
+            //printDialog.Dispose();
 
         }
 
@@ -221,17 +210,22 @@ namespace Calculate_kromka_last_v
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             int totalLength = 0;
+            int tl = 0;
             foreach (DataRow r in dt.Rows)
             {
                 totalLength += Convert.ToInt32(r["Length for clue"]);
+                tl += Convert.ToInt32(r["Total Length for clue"]);
             }
 
             DataRow row = dt.NewRow();
             row["Name"] = "Total";
+            row["Material"] = "";
             row["Width"] = "";
             row["Height"] = "";
+            row["Count"] = "";
             row["Image"] = null;
             row["Length for clue"] = totalLength;
+            row["Total Length for clue"] = tl;
             dt.Rows.Add(row);
             dgv_test.DataSource = dt;
             dgv_test.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
@@ -254,20 +248,23 @@ namespace Calculate_kromka_last_v
                 printDocument1.DocumentName = "Page Print";
                 printDocument1.Print();
 
-                current_row = 0;
-                FirstPage = true;
-                NewPage = false;
+                //current_row = 0;
+                //FirstPage = true;
+                //NewPage = false;
 
-                MorePagesToPrint = false;
+                //MorePagesToPrint = false;
             }
+            //printDialog.Dispose();
         }
 
         private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
+            //DestroyValues();
+
             int LeftMargin = e.MarginBounds.Left;
             int TmpWidth = e.MarginBounds.Width;
             int TopMargin = e.MarginBounds.Top;
-            int TotalWidth = 600;
+            int TotalWidth = 800;
             List<int> AColumnLefts = new List<int>();
             List<int> AColumnWidths = new List<int>();
             int HeaderHeight = 25;
@@ -418,11 +415,20 @@ namespace Calculate_kromka_last_v
         {
             try
             {
-                printPreviewDialog1.Document = printDocument1;
-                printPreviewDialog1.Show();
+                current_row = 0;
+                FirstPage = true;
+                NewPage = false;
+                MorePagesToPrint = false;
+
+                PrintPreviewDialog previewD = new PrintPreviewDialog();
+                previewD.Document = printDocument1;
+                previewD.Show();
+                //printPreviewDialog1.Document = printDocument1;
+                //printPreviewDialog1.Show();
             }
             catch(Exception err)
             {
+                Console.WriteLine("Error occured " + err.GetBaseException());
                 String errorMessage = rm.GetString("WarningMessagePrintPreview", Thread.CurrentThread.CurrentUICulture);
                 MessageBox.Show("Print preview not available", "Sorry", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -462,5 +468,16 @@ namespace Calculate_kromka_last_v
             if(dt != null)
                 dgv_test.DataSource = dt;
         }
+
+        //private void panel1_Paint(object sender, PaintEventArgs e)
+        //{
+
+        //}
+
+        //private void printDocument1_EndPrint(object sender, PrintEventArgs e)
+        //{
+        //    //
+
+        //}
     }
 }
