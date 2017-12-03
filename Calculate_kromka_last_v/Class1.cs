@@ -173,20 +173,21 @@ namespace Calculate_kromka_last_v
             try
             {
                 scale();
+                //scale(420, 230);
                 B1.BackColor = Color.Black;
-                B1.Location = new System.Drawing.Point(30, 30);
+                B1.Location = new System.Drawing.Point(10, 10);
                 B1.Width = Convert.ToInt32(this.width_sc);
                 B1.Height = 10;
                 B2.BackColor = Color.Black;
-                B2.Location = new System.Drawing.Point(30, 30);
+                B2.Location = new System.Drawing.Point(10, 10);
                 B2.Height = Convert.ToInt32(this.height_sc);
                 B2.Width = 10;
                 B3.BackColor = Color.Black;
-                B3.Location = new System.Drawing.Point(Convert.ToInt32(this.width_sc) + 20, 30);
+                B3.Location = new System.Drawing.Point(Convert.ToInt32(this.width_sc), 10);
                 B3.Height = Convert.ToInt32(this.height_sc);
                 B3.Width = 10;
                 B4.BackColor = Color.Black;
-                B4.Location = new System.Drawing.Point(30, Convert.ToInt32(this.height_sc) + 20);
+                B4.Location = new System.Drawing.Point(10, Convert.ToInt32(this.height_sc));
                 B4.Height = 10;
                 B4.Width = Convert.ToInt32(this.width_sc);
             }
@@ -205,20 +206,57 @@ namespace Calculate_kromka_last_v
             p1.Refresh();
         }
 
-        public void  scale()
+        public void scale()
         {
+            int dec = 150;
             double a;
             if (height < width)
             {
-                a = width/380;
+                a = width / dec;
             }
             else {
-                a = height/380;
+                a = height / dec;
             }
-            
-                width_sc = width /a;
-                height_sc = height/a;
-                    
+
+            width_sc = width / a;
+            height_sc = height / a;
+
         }
-}
+
+        //public void scale()
+        //{
+        //    int max_width_area = 400;
+        //    int max_height_area = 200;
+        //    double a;
+        //    int correction = 30;
+        //    //WIDTH OF PAINT AREA IS LARGE THAN HEIGHT
+        //    if (height > width)
+        //    {
+        //        if(height > max_height_area)
+        //        {
+        //            height_sc = max_height_area - correction;
+        //            a = height / width;
+        //            width_sc = width * a;
+        //        }
+        //        else
+        //        {
+        //            height_sc = height;
+        //            width_sc = width;
+        //        }
+        //    }
+        //    else {
+        //        if (width > max_width_area)
+        //        {
+        //            width_sc = max_width_area - correction;
+        //            a = height / width;
+        //            height_sc = height * a;
+        //        }
+        //        else
+        //        {
+        //            height_sc = height;
+        //            width_sc = width;
+        //        }
+        //    }
+        //}
+    }
 }

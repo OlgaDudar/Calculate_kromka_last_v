@@ -47,7 +47,7 @@ namespace Calculate_kromka_last_v
 
         private void AddElementToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            panel1.Controls.Clear();
+            drawArea.Controls.Clear();
             panel2.Visible = true;
             InitializeValues();
             btn_draw.Enabled = true;
@@ -96,11 +96,14 @@ namespace Calculate_kromka_last_v
                 mat = cmb_material.Text;
                 cnt = Convert.ToInt32(txt_count.Text);
 
-                r1 = new Rect(ident, mat, cnt, width, height, panel1, this);
+                r1 = new Rect(ident, mat, cnt, width, height, drawArea, this);
                 r1.Draw();
                 btn_draw.Enabled = false;
+                btn_push.Enabled = true;
             }
         }
+
+
 
         //return true if any inconsisten values
         private bool CheckValues()
@@ -169,7 +172,13 @@ namespace Calculate_kromka_last_v
             row["Length for clue"] = r1.lenght_for_clue;
             row["Total Length for clue"] = r1.lenght_for_clue*r1.count;
             dt.Rows.Add(row);
-            //dgv_test.DataSource = dt;
+            dgv_test.DataSource = dt;
+            txb_Name.Focus();
+            //New element
+            drawArea.Controls.Clear();
+            panel2.Visible = true;
+            InitializeValues();
+            btn_draw.Enabled = true;
 
         }
 
@@ -469,6 +478,50 @@ namespace Calculate_kromka_last_v
                 dgv_test.DataSource = dt;
         }
 
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgv_test_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (dt == null)
+            {
+                InitializeTable();
+            }
+            DataRow row = dt.NewRow();
+            row["Name"] = r1.name;
+            row["Material"] = r1.material;
+            row["Width"] = r1.width;
+            row["Height"] = r1.height;
+            row["Count"] = r1.count;
+            row["Image"] = imageToByteArray(r1.icone);
+            row["Length for clue"] = r1.lenght_for_clue;
+            row["Total Length for clue"] = r1.lenght_for_clue * r1.count;
+            dt.Rows.Add(row);
+            dgv_test.DataSource = dt;
+            
+            //New element
+            drawArea.Controls.Clear();
+            panel2.Visible = true;
+            InitializeValues();
+            btn_draw.Enabled = true;
+            btn_push.Enabled = false;
+
+            txb_Name.Focus();
+            txb_Name.Select();
+        }
+
         //private void panel1_Paint(object sender, PaintEventArgs e)
         //{
 
@@ -479,5 +532,12 @@ namespace Calculate_kromka_last_v
         //    //
 
         //}
+
+        private void drawArea_Leave(object sender, System.EventArgs e)
+        {
+            btn_push.Focus();
+        }
+
+
     }
 }

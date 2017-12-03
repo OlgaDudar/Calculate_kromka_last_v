@@ -38,8 +38,9 @@
             this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uKRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eNGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.drawArea = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btn_push = new System.Windows.Forms.Button();
             this.cmb_material = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txt_count = new System.Windows.Forms.TextBox();
@@ -51,15 +52,9 @@
             this.btn_draw = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.lbl_total = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.Table = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.dgv_test = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,13 +62,13 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.lbl_total = new System.Windows.Forms.Label();
+            this.lb_total = new System.Windows.Forms.Label();
+            this.dgv_test = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.Table.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_test)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_test)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -132,14 +127,15 @@
             resources.ApplyResources(this.eNGToolStripMenuItem, "eNGToolStripMenuItem");
             this.eNGToolStripMenuItem.Click += new System.EventHandler(this.eNGToolStripMenuItem_Click);
             // 
-            // panel1
+            // drawArea
             // 
-            this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            this.drawArea.BackColor = System.Drawing.Color.WhiteSmoke;
+            resources.ApplyResources(this.drawArea, "drawArea");
+            this.drawArea.Name = "drawArea";
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.btn_push);
             this.panel2.Controls.Add(this.cmb_material);
             this.panel2.Controls.Add(this.label8);
             this.panel2.Controls.Add(this.txt_count);
@@ -154,6 +150,14 @@
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
             // 
+            // btn_push
+            // 
+            this.btn_push.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            resources.ApplyResources(this.btn_push, "btn_push");
+            this.btn_push.Name = "btn_push";
+            this.btn_push.UseVisualStyleBackColor = false;
+            this.btn_push.Click += new System.EventHandler(this.button1_Click);
+            // 
             // cmb_material
             // 
             this.cmb_material.FormattingEnabled = true;
@@ -167,6 +171,7 @@
             // 
             resources.ApplyResources(this.label8, "label8");
             this.label8.Name = "label8";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // txt_count
             // 
@@ -218,40 +223,9 @@
             resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
             // 
-            // lbl_total
-            // 
-            resources.ApplyResources(this.lbl_total, "lbl_total");
-            this.lbl_total.ForeColor = System.Drawing.Color.DarkRed;
-            this.lbl_total.Name = "lbl_total";
-            // 
-            // label4
-            // 
-            resources.ApplyResources(this.label4, "label4");
-            this.label4.Name = "label4";
-            // 
             // saveFileDialog1
             // 
             resources.ApplyResources(this.saveFileDialog1, "saveFileDialog1");
-            // 
-            // Table
-            // 
-            this.Table.Controls.Add(this.tabPage1);
-            this.Table.Controls.Add(this.tabPage3);
-            resources.ApplyResources(this.Table, "Table");
-            this.Table.Name = "Table";
-            this.Table.SelectedIndex = 0;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.BackColor = System.Drawing.Color.Gainsboro;
-            this.tabPage1.Controls.Add(this.label6);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.panel2);
-            this.tabPage1.Controls.Add(this.lbl_total);
-            this.tabPage1.Controls.Add(this.label4);
-            this.tabPage1.Controls.Add(this.panel1);
-            resources.ApplyResources(this.tabPage1, "tabPage1");
-            this.tabPage1.Name = "tabPage1";
             // 
             // label6
             // 
@@ -262,24 +236,6 @@
             // 
             resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.dgv_test);
-            resources.ApplyResources(this.tabPage3, "tabPage3");
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            this.tabPage3.Enter += new System.EventHandler(this.tabPage3_Enter);
-            // 
-            // dgv_test
-            // 
-            this.dgv_test.AllowUserToResizeColumns = false;
-            this.dgv_test.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgv_test.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_test.ContextMenuStrip = this.contextMenuStrip1;
-            resources.ApplyResources(this.dgv_test, "dgv_test");
-            this.dgv_test.Name = "dgv_test";
-            this.dgv_test.RowTemplate.Height = 24;
             // 
             // contextMenuStrip1
             // 
@@ -322,11 +278,40 @@
             resources.ApplyResources(this.printPreviewDialog1, "printPreviewDialog1");
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             // 
+            // lbl_total
+            // 
+            resources.ApplyResources(this.lbl_total, "lbl_total");
+            this.lbl_total.ForeColor = System.Drawing.Color.DarkRed;
+            this.lbl_total.Name = "lbl_total";
+            // 
+            // lb_total
+            // 
+            resources.ApplyResources(this.lb_total, "lb_total");
+            this.lb_total.Name = "lb_total";
+            // 
+            // dgv_test
+            // 
+            this.dgv_test.AllowUserToResizeColumns = false;
+            this.dgv_test.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_test.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_test.ContextMenuStrip = this.contextMenuStrip1;
+            resources.ApplyResources(this.dgv_test, "dgv_test");
+            this.dgv_test.Name = "dgv_test";
+            this.dgv_test.RowTemplate.Height = 24;
+            this.dgv_test.TabStop = false;
+            this.dgv_test.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_test_CellContentClick);
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.Table);
+            this.Controls.Add(this.dgv_test);
+            this.Controls.Add(this.lbl_total);
+            this.Controls.Add(this.lb_total);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.drawArea);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -334,12 +319,8 @@
             this.menuStrip1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.Table.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_test)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_test)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -351,24 +332,18 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addElementToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToTableToolStripMenuItem;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel drawArea;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btn_draw;
         private System.Windows.Forms.TextBox txb_width;
         private System.Windows.Forms.TextBox txb_height;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lbl_total;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txb_Name;
-        private System.Windows.Forms.TabControl Table;
-        private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.ToolStripMenuItem printTableToolStripMenuItem;
         private System.Windows.Forms.PrintDialog printDialog1;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.DataGridView dgv_test;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
@@ -384,6 +359,10 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox txt_count;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lbl_total;
+        private System.Windows.Forms.Label lb_total;
+        private System.Windows.Forms.DataGridView dgv_test;
+        private System.Windows.Forms.Button btn_push;
     }
 }
 
